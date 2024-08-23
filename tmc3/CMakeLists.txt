@@ -28,8 +28,8 @@ add_custom_target(
                            -D VERSION_EXTRA=${VERSION_EXTRA}
                            -D VERSION_CACHE_FILE=${VERSION_CACHE_FILE}
                            -D GIT_EXECUTABLE=${GIT_EXECUTABLE}
-                           -P ${CMAKE_SOURCE_DIR}/scripts/genversion.cmake
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                           -P ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/genversion.cmake
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
 add_custom_command(
@@ -163,21 +163,50 @@ include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/program-options-lite"
 )
 
-add_executable (tmc3
-  ${PROJECT_CPP_FILES}
-  ${PROJECT_INC_FILES}
-  ${PROJECT_IN_FILES}
-  ${VERSION_FILE}
-)
-add_dependencies(tmc3 genversion)
 
-add_executable (ply-merge EXCLUDE_FROM_ALL
-  "../tools/ply-merge.cpp"
-  "misc.cpp"
-  "ply.cpp"
-  "../dependencies/program-options-lite/program_options_lite.cpp"
-  ${VERSION_FILE}
-)
-add_dependencies(ply-merge genversion)
+option(EXECUTABLE "Build tmc3 binary executable" OFF)
+option(LIBRARY "Build tmc3 static library" ON)
 
-install (TARGETS tmc3 DESTINATION bin)
+if(EXECUTABLE)
+  add_definitions(-DBUILD_EXECUTABLE)
+
+  add_executable (tmc3
+    ${PROJECT_CPP_FILES}
+    ${PROJECT_INC_FILES}
+    ${PROJECT_IN_FILES}
+    ${VERSION_FILE}
+  )
+  add_dependencies(tmc3 genversion)
+
+  add_executable (ply-merge EXCLUDE_FROM_ALL
+    "../tools/ply-merge.cpp"
+    "misc.cpp"
+    "ply.cpp"
+    "../dependencies/program-options-lite/program_options_lite.cpp"
+    ${VERSION_FILE}
+  )
+  add_dependencies(ply-merge genversion)
+
+  install (TARGETS tmc3 DESTINATION bin)
+endif()
+
+if(LIBRARY)
+  add_library(
+    libtmc3
+    STATIC
+    ${PROJECT_CPP_FILES}
+    ${PROJECT_INC_FILES}
+    ${PROJECT_IN_FILES}
+    ${VERSION_FILE}
+  )
+  add_dependencies(libtmc3 genversion)
+
+  target_include_directories(
+    libtmc3
+    PUBLIC
+    "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/tmc3>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nanoflann"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/program-options-lite"
+  )
+endif()
