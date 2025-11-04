@@ -511,9 +511,6 @@ namespace program_options_lite {
 //---------------------------------------------------------------------------
 // :: Command line / config parsing
 
-void sanitizeEncoderOpts(
-  Parameters& params, df::program_options_lite::ErrorReporter& err);
-
 //---------------------------------------------------------------------------
 
 bool
@@ -1511,47 +1508,47 @@ ParseParameters(int argc, char* argv[], Parameters& params)
   params.encoder.outputFpBits = params.outputFpBits;
   params.decoder.outputFpBits = params.outputFpBits;
 
-  if (!params.isDecoder)
-    sanitizeEncoderOpts(params, err);
-
-  // check required arguments are specified
-  if (!params.isDecoder && params.uncompressedDataPath.empty())
-    err.error() << "uncompressedDataPath not set\n";
-
-  if (params.isDecoder && params.reconstructedDataPath.empty())
-    err.error() << "reconstructedDataPath not set\n";
-
-  if (params.compressedStreamPath.empty())
-    err.error() << "compressedStreamPath not set\n";
-
-  // report the current configuration (only in the absence of errors so
-  // that errors/warnings are more obvious and in the same place).
-  if (err.is_errored)
-    return false;
-
-  // Dump the complete derived configuration
-  cout << "+ Effective configuration parameters\n";
-
-  po::dumpCfg(cout, opts, "General", 4);
-  if (params.isDecoder) {
-    po::dumpCfg(cout, opts, "Decoder", 4);
-  } else {
-    po::dumpCfg(cout, opts, "Coordinate system scaling", 4);
-    po::dumpCfg(cout, opts, "Encoder", 4);
-    po::dumpCfg(cout, opts, "Geometry", 4);
-    po::dumpCfg(cout, opts, "Recolouring", 4);
-
-    for (const auto& it : params.encoder.attributeIdxMap) {
-      // NB: when dumping the config, opts references params_attr
-      params_attr.desc = params.encoder.sps.attributeSets[it.second];
-      params_attr.aps = params.encoder.aps[it.second];
-      params_attr.encoder = params.encoder.attr[it.second];
-      cout << "    " << it.first << "\n";
-      po::dumpCfg(cout, opts, "Attributes", 8);
-    }
-  }
-
-  cout << endl;
+  //  if (!params.isDecoder)
+  //    sanitizeEncoderOpts(params, err);
+  //
+  //  // check required arguments are specified
+  //  if (!params.isDecoder && params.uncompressedDataPath.empty())
+  //    err.error() << "uncompressedDataPath not set\n";
+  //
+  //  if (params.isDecoder && params.reconstructedDataPath.empty())
+  //    err.error() << "reconstructedDataPath not set\n";
+  //
+  //  if (params.compressedStreamPath.empty())
+  //    err.error() << "compressedStreamPath not set\n";
+  //
+  //  // report the current configuration (only in the absence of errors so
+  //  // that errors/warnings are more obvious and in the same place).
+  //  if (err.is_errored)
+  //    return false;
+  //
+  //  // Dump the complete derived configuration
+  //  cout << "+ Effective configuration parameters\n";
+  //
+  //  po::dumpCfg(cout, opts, "General", 4);
+  //  if (params.isDecoder) {
+  //    po::dumpCfg(cout, opts, "Decoder", 4);
+  //  } else {
+  //    po::dumpCfg(cout, opts, "Coordinate system scaling", 4);
+  //    po::dumpCfg(cout, opts, "Encoder", 4);
+  //    po::dumpCfg(cout, opts, "Geometry", 4);
+  //    po::dumpCfg(cout, opts, "Recolouring", 4);
+  //
+  //    for (const auto& it : params.encoder.attributeIdxMap) {
+  //      // NB: when dumping the config, opts references params_attr
+  //      params_attr.desc = params.encoder.sps.attributeSets[it.second];
+  //      params_attr.aps = params.encoder.aps[it.second];
+  //      params_attr.encoder = params.encoder.attr[it.second];
+  //      cout << "    " << it.first << "\n";
+  //      po::dumpCfg(cout, opts, "Attributes", 8);
+  //    }
+  //  }
+  //
+  //  cout << endl;
 
   return true;
 }

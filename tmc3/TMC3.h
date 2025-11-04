@@ -40,12 +40,15 @@
 
 #include "TMC3Config.h"
 #include "pcc_chrono.h"
+#include "program_options_lite.h"
 
 struct Parameters;
 
 typedef pcc::chrono::Stopwatch<pcc::chrono::utime_inc_children_clock>
   Stopwatch;
 
+void sanitizeEncoderOpts(
+  Parameters& params, df::program_options_lite::ErrorReporter& err);
 bool ParseParameters(int argc, char* argv[], Parameters& params);
 int Compress(Parameters& params, Stopwatch&);
 int Decompress(Parameters& params, Stopwatch&);
