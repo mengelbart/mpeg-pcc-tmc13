@@ -573,7 +573,7 @@ int
 PCCTMC3Decoder3::decodeGeometryBrick(const PayloadBuffer& buf)
 {
   assert(buf.type == PayloadType::kGeometryBrick);
-  std::cout << "positions bitstream size " << buf.size() << " B\n";
+  // std::cout << "positions bitstream size " << buf.size() << " B\n";
 
   // todo(df): replace with attribute mapping
   bool hasColour = std::any_of(
@@ -768,9 +768,9 @@ PCCTMC3Decoder3::decodeGeometryBrick(const PayloadBuffer& buf)
 
   auto total_user =
     std::chrono::duration_cast<std::chrono::milliseconds>(clock_user.count());
-  std::cout << "positions processing time (user): "
-            << total_user.count() / 1000.0 << " s\n";
-  std::cout << std::endl;
+  // std::cout << "positions processing time (user): "
+  //           << total_user.count() / 1000.0 << " s\n";
+  // std::cout << std::endl;
 
   return 0;
 }

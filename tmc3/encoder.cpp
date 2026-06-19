@@ -496,7 +496,7 @@ PCCTMC3Encoder3::compress(
       partitions.slices.insert(
         partitions.slices.end(), curSlices.begin(), curSlices.end());
     }
-    std::cout << "Slice number: " << partitions.slices.size() << std::endl;
+    // std::cout << "Slice number: " << partitions.slices.size() << std::endl;
   } while (0);
 
   if (_frameCounter) {
@@ -1007,13 +1007,13 @@ PCCTMC3Encoder3::compressPartition(
     clock_user.stop();
 
     double bpp = double(8 * payload.size()) / inputPointCloud.getPointCount();
-    std::cout << "positions bitstream size " << payload.size() << " B (" << bpp
-              << " bpp)\n";
+    // std::cout << "positions bitstream size " << payload.size() << " B (" << bpp
+    //           << " bpp)\n";
 
     auto total_user = std::chrono::duration_cast<std::chrono::milliseconds>(
       clock_user.count());
-    std::cout << "positions processing time (user): "
-              << total_user.count() / 1000.0 << " s" << std::endl;
+    // std::cout << "positions processing time (user): "
+    //           << total_user.count() / 1000.0 << " s" << std::endl;
 
     callback->onOutputBuffer(payload);
   }
